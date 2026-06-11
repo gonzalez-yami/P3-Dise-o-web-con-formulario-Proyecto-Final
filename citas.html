@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Citas - Clínica Dental</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #e2e5f5; margin: 0; padding: 0; display: flex; flex-direction: column; min-height: 100vh; }
+        .header-bg { background-color: #ffffff; text-align: center; padding: 15px 0 5px 0; }
+        .header-title { font-size: 28px; font-weight: bold; color: #000000; margin: 0; }
+        .navbar { background-color: #b39ddb; display: flex; justify-content: center; gap: 30px; padding: 12px 0; }
+        .navbar a { color: white; text-decoration: none; font-weight: bold; font-size: 16px; }
+        .navbar a:hover { text-decoration: underline; }
+        .navbar a.activo { text-decoration: underline; font-weight: 900; }
+        
+        .workspace-container { display: flex; max-width: 1400px; width: 95%; margin: 25px auto; gap: 25px; flex-grow: 1; }
+        .mitad-izquierda { flex: 1; background-color: #ffffff; border-radius: 20px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); display: flex; flex-direction: column; }
+        
+        .btn-volver { align-self: flex-start; background-color: #6a1b9a; color: white; text-decoration: none; padding: 8px 16px; font-size: 13px; font-weight: bold; border-radius: 8px; margin-bottom: 15px; transition: background 0.2s; }
+        .btn-volver:hover { background-color: #4a148c; }
+
+        .titulo-formulario { font-size: 22px; font-weight: bold; color: #6a1b9a; margin-bottom: 20px; border-bottom: 2px solid #fce4ec; padding-bottom: 10px; }
+        
+        .form-group { margin-bottom: 14px; text-align: left; }
+        .form-group label { display: block; font-weight: bold; color: #333; margin-bottom: 5px; font-size: 14px; }
+        .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
+
+        .bloque-acciones { margin-top: auto; padding-top: 20px; display: flex; gap: 15px; }
+        .btn-accion { flex: 1; padding: 12px; font-size: 14px; font-weight: bold; color: white; border: none; border-radius: 10px; cursor: pointer; }
+        .btn-agregar { background-color: #4caf50; }
+
+        .mitad-derecha { flex: 1; background-color: #fce4ec; border-radius: 20px; padding: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; justify-content: flex-start; overflow-y: auto; max-height: 75vh; width: 100%; }
+        #contenedor { width: 100%; }
+        .titulo-vista { color: #6a1b9a; font-size: 30px; font-weight: bold; margin: 0; }
+        .subtitulo-vista { color: #8e24aa; font-size: 12px; font-weight: bold; letter-spacing: 1px; margin-top: 5px; margin-bottom: 30px; text-transform: uppercase; }
+        .estado-vacio { text-align: center; color: #888; font-style: italic; border: 2px dashed #b39ddb; padding: 35px; border-radius: 15px; background-color: rgba(255, 255, 255, 0.5); width: 100%; box-sizing: border-box; }
+        
+        .tarjeta-cita { background: white; border-radius: 12px; padding: 15px; margin: 10px 0; width: 100%; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border-left: 4px solid #6a1b9a; box-sizing: border-box; }
+        .tarjeta-cita h4 { margin: 0 0 8px 0; color: #6a1b9a; }
+        .tarjeta-cita p { margin: 4px 0; font-size: 14px; color: #444; }
+
+        .tarjeta-btn-group { display: flex; gap: 10px; margin-top: 12px; }
+        .btn-tarjeta { padding: 6px 12px; border: none; border-radius: 6px; font-size: 12px; font-weight: bold; color: white; cursor: pointer; }
+        .btn-tarjeta-edit { background-color: #ffb300; color: black; }
+        .btn-tarjeta-delete { background-color: #f44336; }
+        
+        .footer { background-color: #6a1b9a; color: white; text-align: center; padding: 15px 0; font-size: 14px; line-height: 1.5; margin-top: auto; display: flex; flex-direction: row; justify-content: center; }
+    </style>
+</head>
+<body>
+    <div class="header-bg"><h1 class="header-title">🦷 BASE DE DATOS CLÍNICA DENTAL</h1></div>
+    <div class="navbar">
+        <a href="pacientes.html">Pacientes</a>
+        <a href="odontologos.html">Odontólogos</a>
+        <a href="tratamientos.html">Tratamientos</a>
+        <a href="citas.html" class="activo">Citas</a>
+    </div>
+
+    <div class="workspace-container">
+        <div class="mitad-izquierda">
+            <a href="index.html" class="btn-volver">⬅ Volver al Menú</a>
+            <div class="titulo-formulario">📅 Citas</div>
+            
+            <div class="form-group"><label>No. Cita:</label><input type="text" id="numeroCita" placeholder="Ej. C01" required></div>
+            <div class="form-group"><label>Paciente:</label><input type="text" id="paciente" placeholder="Nombre completo del paciente" required></div>
+            <div class="form-group"><label>Odontólogo Asignado:</label><input type="text" id="odontologo" placeholder="Ej. Dra. Ana Luisa Martinez" required></div>
+            <div class="form-group"><label>Fecha Programada:</label><input type="date" id="fecha" required></div>
+            <div class="form-group"><label>Hora de Atención:</label><input type="time" id="hora" required></div>
+            <div class="form-group">
+                <label>Estado Actual de la Cita:</label>
+                <select id="estado" required>
+                    <option value="Pendiente">Pendiente</option>
+                    <option value="Completada">Completada</option>
+                    <option value="Cancelada">Cancelada</option>
+                </select>
+            </div>
+            <div class="form-group"><label>Motivo de Consulta:</label><input type="text" id="motivo" placeholder="Ej. Dolor agudo" required></div>
+            
+            <div class="bloque-acciones">
+                <button class="btn-accion btn-agregar" onclick="guardar()">Guardar</button>
+            </div>
+        </div>
+
+        <div class="mitad-derecha">
+            <h2 class="titulo-vista">📅 Citas Programadas</h2>
+            <p class="subtitulo-vista">SISTEMA DE ADMINISTRACIÓN DENTAL</p>
+            <div id="contenedor"></div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div style=" font-size: 60px">🦷</div>
+        <div style="display:flex; align-items: center; font-size: 20px;">Alumno: Gonzalez Mares Sofia Yamileth<br>No. Control: 1027 | Semestre: 4° | Grupo: J<br>Implementa Bases de Datos No Relacionales en un Sistema de Información</div>
+    </div>
+
+    <script>
+        const API = "http://localhost:3000/api/citas";
+        window.onload = () => { setMinDate(); listar(); };
+        let editMode = false;
+
+        function setMinDate() {
+            const inp = document.getElementById('fecha');
+            if(!inp) return;
+            inp.min = new Date().toISOString().split('T')[0];
+        }
+
+        function formatToInputDate(serverDate) {
+            if(!serverDate) return "";
+            if(serverDate.includes('-')) {
+                const parts = serverDate.split('-');
+                if(parts[0].length === 4) return serverDate; // already YYYY-MM-DD
+                const [d,m,y] = parts;
+                return `${y.padStart(4,'0')}-${m.padStart(2,'0')}-${d.padStart(2,'0')}`;
+            }
+            return serverDate;
+        }
+
+        function formatToServerDate(inputDate) {
+            if(!inputDate) return "";
+            if(inputDate.includes('-')) {
+                const parts = inputDate.split('-');
+                if(parts[0].length === 4) {
+                    const [y,m,d] = parts;
+                    return `${d}-${m}-${y}`; // DD-MM-YYYY
+                }
+                return inputDate;
+            }
+            return inputDate;
+        }
+
+        function formatTimeToInput(serverTime) {
+            if(!serverTime) return "";
+            const st = serverTime.trim();
+            if(/am|pm/i.test(st)) {
+                const m = st.match(/(\d{1,2}):(\d{2})/);
+                if(!m) return "";
+                let h = parseInt(m[1], 10);
+                const min = m[2];
+                if(/pm/i.test(st) && h < 12) h += 12;
+                if(/am/i.test(st) && h === 12) h = 0;
+                return `${String(h).padStart(2,'0')}:${min}`;
+            }
+            const parts = st.split(':');
+            if(parts.length >= 2) return `${parts[0].padStart(2,'0')}:${parts[1].padStart(2,'0')}`;
+            return st;
+        }
+
+        function formatTimeToServer(inputTime) {
+            return inputTime || ""; // keep HH:MM (24h)
+        }
+
+        async function listar() {
+            try {
+                const res = await fetch(API);
+                const datos = await res.json();
+                const div = document.getElementById("contenedor");
+
+                if(!datos || datos.length === 0) {
+                    div.innerHTML = `<div class="estado-vacio"><p style="font-weight: bold; color: #6a1b9a;">[ Colección Vacía ]</p><p>No hay citas agendadas.</p></div>`;
+                    return;
+                }
+
+                let html = "";
+                datos.forEach(d => {
+                    html += `
+                    <div class="tarjeta-cita">
+                        <h4>Cita N°: ${d.numeroCita}</h4>
+                        <p><strong>Paciente:</strong> ${d.paciente}</p>
+                        <p><strong>Odontólogo:</strong> ${d.odontologo}</p>
+                        <p><strong>Fecha:</strong> ${d.fecha} | Hora: ${d.hora}</p>
+                        <p><strong>Estado:</strong> ${d.estado}</p>
+                        <p><strong>Motivo:</strong> ${d.motivo}</p>
+                        <div class="tarjeta-btn-group">
+                            <button class="btn-tarjeta btn-tarjeta-edit" onclick="cargarEdicion('${d.numeroCita}','${d.paciente}','${d.odontologo}','${d.fecha}','${d.hora}','${d.estado}','${d.motivo}')">✏️ Editar</button>
+                            <button class="btn-tarjeta btn-tarjeta-delete" onclick="eliminar('${d.numeroCita}')">❌ Eliminar</button>
+                        </div>
+                    </div>`;
+                });
+                div.innerHTML = html;
+            } catch(e) { console.error(e); }
+        }
+
+        async function guardar() {
+            const datos = obtenerDatos();
+            if(!datos) return;
+
+            try {
+                if (editMode) {
+                    const res = await fetch(`${API}/${datos.numeroCita}`, { 
+                        method: "PUT", 
+                        headers: {"Content-Type": "application/json"}, 
+                        body: JSON.stringify(datos) 
+                    });
+                    if(res.ok) {
+                        alert("✅ Cita modificada correctamente");
+                        editMode = false;
+                        document.getElementById("numeroCita").disabled = false;
+                    } else { alert("❌ Error al modificar la cita"); }
+                } else {
+                    const res = await fetch(API, { 
+                        method: "POST", 
+                        headers: {"Content-Type": "application/json"}, 
+                        body: JSON.stringify(datos) 
+                    });
+                    if(res.ok) { alert("✅ Cita agendada correctamente"); }
+                    else { alert("❌ Error al agendar. Comprueba que el número de cita no se repita."); }
+                }
+                limpiar(); 
+                await listar();
+            } catch(e) { console.error(e); }
+        }
+
+        async function eliminar(id) {
+            if(!confirm("¿Seguro que quieres eliminar esta cita?")) return;
+            try {
+                const res = await fetch(`${API}/${id}`, { method: "DELETE" });
+                if(res.ok) {
+                    alert("✅ Cita eliminada");
+                    await listar();
+                }
+            } catch(e) { console.error(e); }
+        }
+
+        function cargarEdicion(num, pac, odon, fec, hor, est, mot) {
+            document.getElementById("numeroCita").value = num;
+            document.getElementById("numeroCita").disabled = true;
+            document.getElementById("paciente").value = pac;
+            document.getElementById("odontologo").value = odon;
+            document.getElementById("fecha").value = formatToInputDate(fec);
+            document.getElementById("hora").value = formatTimeToInput(hor);
+            document.getElementById("estado").value = est;
+            document.getElementById("motivo").value = mot;
+            editMode = true;
+        }
+
+        function obtenerDatos() {
+            const num = document.getElementById("numeroCita").value.trim();
+            const pac = document.getElementById("paciente").value.trim();
+            const odon = document.getElementById("odontologo").value.trim();
+            const fecInput = document.getElementById("fecha").value;
+            const horInput = document.getElementById("hora").value;
+            const est = document.getElementById("estado").value;
+            const mot = document.getElementById("motivo").value.trim();
+
+            if(!num || !pac || !odon || !fecInput || !horInput || !mot) { alert("⚠️ Todos los campos son obligatorios"); return null; }
+
+            // Validar que la fecha no sea pasada
+            const today = new Date(); today.setHours(0,0,0,0);
+            const selected = new Date(fecInput);
+            if(selected < today) { alert("⚠️ La fecha debe ser hoy o una fecha futura"); return null; }
+
+            // Validar formato de hora HH:MM
+            if(!/^\d{2}:\d{2}$/.test(horInput)) { alert("⚠️ Introduce una hora válida"); return null; }
+
+            const fec = formatToServerDate(fecInput);
+            const hor = formatTimeToServer(horInput);
+
+            return { numeroCita: num, paciente: pac, odontologo: odon, fecha: fec, hora: hor, estado: est, motivo: mot };
+        }
+
+        function limpiar() {
+            document.getElementById("numeroCita").value = "";
+            document.getElementById("numeroCita").disabled = false;
+            document.getElementById("paciente").value = "";
+            document.getElementById("odontologo").value = "";
+            document.getElementById("fecha").value = "";
+            document.getElementById("hora").value = "";
+            document.getElementById("estado").value = "Pendiente";
+            document.getElementById("motivo").value = "";
+            editMode = false;
+        }
+    </script>
+</body>
+</html>

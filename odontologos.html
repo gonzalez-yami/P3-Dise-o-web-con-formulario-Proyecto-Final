@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Odontólogos - Clínica Dental</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #e2e5f5; margin: 0; padding: 0; display: flex; flex-direction: column; min-height: 100vh; }
+        .header-bg { background-color: #ffffff; text-align: center; padding: 15px 0 5px 0; }
+        .header-title { font-size: 28px; font-weight: bold; color: #000000; margin: 0; }
+        .navbar { background-color: #b39ddb; display: flex; justify-content: center; gap: 30px; padding: 12px 0; }
+        .navbar a { color: white; text-decoration: none; font-weight: bold; font-size: 16px; }
+        .navbar a:hover { text-decoration: underline; }
+        .navbar a.activo { text-decoration: underline; font-weight: 900; }
+        
+        .workspace-container { display: flex; max-width: 1400px; width: 95%; margin: 25px auto; gap: 25px; flex-grow: 1; }
+        .mitad-izquierda { flex: 1; background-color: #ffffff; border-radius: 20px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); display: flex; flex-direction: column; }
+        
+        .btn-volver { align-self: flex-start; background-color: #6a1b9a; color: white; text-decoration: none; padding: 8px 16px; font-size: 13px; font-weight: bold; border-radius: 8px; margin-bottom: 15px; transition: background 0.2s; }
+        .btn-volver:hover { background-color: #4a148c; }
+
+        .titulo-formulario { font-size: 22px; font-weight: bold; color: #6a1b9a; margin-bottom: 20px; border-bottom: 2px solid #fce4ec; padding-bottom: 10px; }
+        
+        .form-group { margin-bottom: 14px; text-align: left; }
+        .form-group label { display: block; font-weight: bold; color: #333; margin-bottom: 5px; font-size: 14px; }
+        .form-group input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
+
+        .bloque-acciones { margin-top: auto; padding-top: 20px; display: flex; gap: 15px; }
+        .btn-accion { flex: 1; padding: 12px; font-size: 14px; font-weight: bold; color: white; border: none; border-radius: 10px; cursor: pointer; }
+        .btn-agregar { background-color: #4caf50; }
+
+        .mitad-derecha { flex: 1; background-color: #fce4ec; border-radius: 20px; padding: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; justify-content: flex-start; overflow-y: auto; max-height: 75vh; width: 100%; }
+        #contenedor { width: 100%; }
+        .titulo-vista { color: #6a1b9a; font-size: 30px; font-weight: bold; margin: 0; }
+        .subtitulo-vista { color: #8e24aa; font-size: 12px; font-weight: bold; letter-spacing: 1px; margin-top: 5px; margin-bottom: 30px; text-transform: uppercase; }
+        .estado-vacio { text-align: center; color: #888; font-style: italic; border: 2px dashed #b39ddb; padding: 35px; border-radius: 15px; background-color: rgba(255, 255, 255, 0.5); width: 100%; box-sizing: border-box; }
+        
+        .tarjeta { background: white; border-radius: 12px; padding: 15px; margin: 10px 0; width: 100%; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border-left: 4px solid #6a1b9a; box-sizing: border-box; }
+        .tarjeta h4 { margin: 0 0 8px 0; color: #6a1b9a; }
+        .tarjeta p { margin: 4px 0; font-size: 14px; color: #444; }
+
+        .tarjeta-btn-group { display: flex; gap: 10px; margin-top: 12px; }
+        .btn-tarjeta { padding: 6px 12px; border: none; border-radius: 6px; font-size: 12px; font-weight: bold; color: white; cursor: pointer; }
+        .btn-tarjeta-edit { background-color: #ffb300; color: black; }
+        .btn-tarjeta-delete { background-color: #f44336; }
+        
+        .footer { background-color: #6a1b9a; color: white; text-align: center; padding: 15px 0; font-size: 14px; line-height: 1.5; margin-top: auto; display: flex; flex-direction: row; justify-content: center; }
+    </style>
+</head>
+<body>
+    <div class="header-bg"><h1 class="header-title">🦷 BASE DE DATOS CLÍNICA DENTAL</h1></div>
+    <div class="navbar">
+        <a href="pacientes.html">Pacientes</a>
+        <a href="odontologos.html" class="activo">Odontólogos</a>
+        <a href="tratamientos.html">Tratamientos</a>
+        <a href="citas.html">Citas</a>
+    </div>
+
+    <div class="workspace-container">
+        <div class="mitad-izquierda">
+            <a href="index.html" class="btn-volver">⬅ Volver al Menú</a>
+            <div class="titulo-formulario">👨‍⚕️ Odontólogos</div>
+            
+            <div class="form-group"><label>ID Odontólogo:</label><input type="text" id="id_odontologo" placeholder="Ej. O01" required></div>
+            <div class="form-group"><label>Nombre Completo:</label><input type="text" id="nombre" placeholder="Nombre y apellidos" required></div>
+            <div class="form-group"><label>Especialidad:</label><input type="text" id="especialidad" placeholder="Ej. Ortodoncia" required></div>
+            <div class="form-group"><label>Teléfono:</label><input type="text" id="telefono" placeholder="Ej. 6569876543" required></div>
+            <div class="form-group"><label>Correo Electrónico:</label><input type="text" id="correo" placeholder="ejemplo@clinica.com" required></div>
+            
+            <div class="bloque-acciones">
+                <button class="btn-accion btn-agregar" onclick="guardar()">Guardar</button>
+            </div>
+        </div>
+
+        <div class="mitad-derecha">
+            <h2 class="titulo-vista">👨‍⚕️ Odontólogos Registrados</h2>
+            <p class="subtitulo-vista">SISTEMA DE ADMINISTRACIÓN DENTAL</p>
+            <div id="contenedor"></div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div style=" font-size: 60px">🦷</div>
+        <div style="display:flex; align-items: center; font-size: 20px;">Alumno: Gonzalez Mares Sofia Yamileth<br>No. Control: 1027 | Semestre: 4° | Grupo: J<br>Implementa Bases de Datos No Relacionales en un Sistema de Información</div>
+    </div>
+
+    <script>
+        const API = "http://localhost:3000/api/odontologos";
+        window.onload = listar;
+        let editMode = false;
+
+        async function listar() {
+            try {
+                const res = await fetch(API);
+                const datos = await res.json();
+                const div = document.getElementById("contenedor");
+
+                if(!datos || datos.length === 0) {
+                    div.innerHTML = `<div class="estado-vacio"><p style="font-weight: bold; color: #6a1b9a;">[ Colección Vacía ]</p><p>No hay odontólogos registrados.</p></div>`;
+                    return;
+                }
+
+                let html = "";
+                datos.forEach(d => {
+                    html += `
+                    <div class="tarjeta">
+                        <h4>ID: ${d.id_odontologo}</h4>
+                        <p><strong>Nombre:</strong> ${d.nombre}</p>
+                        <p><strong>Especialidad:</strong> ${d.especialidad}</p>
+                        <p><strong>Teléfono:</strong> ${d.telefono}</p>
+                        <p><strong>Correo:</strong> ${d.correo}</p>
+                        <div class="tarjeta-btn-group">
+                            <button class="btn-tarjeta btn-tarjeta-edit" onclick="cargarEdicion('${d.id_odontologo}','${d.nombre}','${d.especialidad}','${d.telefono}','${d.correo}')">✏️ Editar</button>
+                            <button class="btn-tarjeta btn-tarjeta-delete" onclick="eliminar('${d.id_odontologo}')">❌ Eliminar</button>
+                        </div>
+                    </div>`;
+                });
+                div.innerHTML = html;
+            } catch(e) { console.error(e); }
+        }
+
+        async function guardar() {
+            const datos = obtenerDatos();
+            if(!datos) return;
+
+            try {
+                if (editMode) {
+                    const res = await fetch(`${API}/${datos.id_odontologo}`, { 
+                        method: "PUT", 
+                        headers: {"Content-Type": "application/json"}, 
+                        body: JSON.stringify(datos) 
+                    });
+                    if(res.ok) {
+                        alert("✅ Modificado correctamente");
+                        editMode = false;
+                        document.getElementById("id_odontologo").disabled = false;
+                    } else { alert("❌ Error al modificar"); }
+                } else {
+                    const res = await fetch(API, { 
+                        method: "POST", 
+                        headers: {"Content-Type": "application/json"}, 
+                        body: JSON.stringify(datos) 
+                    });
+                    if(res.ok) { alert("✅ Agregado correctamente"); }
+                    else { alert("❌ Error al guardar. ¿El ID ya existe?"); }
+                }
+                limpiar(); 
+                await listar();
+            } catch(e) { console.error(e); }
+        }
+
+        async function eliminar(id) {
+            if(!confirm("¿Eliminar odontólogo?")) return;
+            try {
+                const res = await fetch(`${API}/${id}`, { method: "DELETE" });
+                if(res.ok) {
+                    alert("✅ Eliminado exitosamente");
+                    await listar();
+                }
+            } catch(e) { console.error(e); }
+        }
+
+        function cargarEdicion(id, nom, esp, tel, cor) {
+            document.getElementById("id_odontologo").value = id;
+            document.getElementById("id_odontologo").disabled = true;
+            document.getElementById("nombre").value = nom;
+            document.getElementById("especialidad").value = esp;
+            document.getElementById("telefono").value = tel;
+            document.getElementById("correo").value = cor;
+            editMode = true;
+        }
+
+        function obtenerDatos() {
+            const id = document.getElementById("id_odontologo").value.trim();
+            const nom = document.getElementById("nombre").value.trim();
+            const esp = document.getElementById("especialidad").value.trim();
+            const tel = document.getElementById("telefono").value.trim();
+            const cor = document.getElementById("correo").value.trim();
+            if(!id || !nom || !esp || !tel || !cor) { alert("⚠️ Todos los campos son obligatorios"); return null; }
+            // IMPORTANTE: Aseguramos que la propiedad coincida con el schema del server.js ('especialidad')
+            return { id_odontologo: id, nombre: nom, especialidad: esp, telefono: tel, correo: cor };
+        }
+
+        function limpiar() {
+            document.getElementById("id_odontologo").value = "";
+            document.getElementById("id_odontologo").disabled = false;
+            document.getElementById("nombre").value = "";
+            document.getElementById("especialidad").value = "";
+            document.getElementById("telefono").value = "";
+            document.getElementById("correo").value = "";
+            editMode = false;
+        }
+    </script>
+</body>
+</html>
